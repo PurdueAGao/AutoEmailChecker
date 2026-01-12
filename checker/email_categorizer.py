@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Gmail API scopes
-SCOPES = ['https://www.googleapis.com/auth/gmail.modify']  # Changed from readonly to modify in order to set emails as read
+SCOPES = ['https://www.googleapis.com/auth/gmail.modify']  # Changed from readonly to modify
 
 class EmailCategorizer:
     def __init__(self):
@@ -42,12 +42,10 @@ class EmailCategorizer:
                 token.write(creds.to_json())
         
         self.gmail_service = build('gmail', 'v1', credentials=creds)
-        print("Gmail authenticated successfully!")
-
-
-    # can I modify the email range at this point? 
+        print("✓ Gmail authenticated successfully!")
+    
     def fetch_emails(self, max_results=20):
-        """Fetch emails from Gmail"""
+        """Fetch recent emails from Gmail"""
         print(f"\nFetching {max_results} recent emails...")
         
         results = self.gmail_service.users().messages().list(
@@ -106,7 +104,7 @@ class EmailCategorizer:
     
     def categorize_email(self, email):
         """Use Claude to categorize a single email"""
-        prompt = f"""Analyze this email and categorize it. 
+        prompt = f"""Analyze this email and categorize it. """
 
 Subject: {email['subject']}
 From: {email['from']}
@@ -149,7 +147,7 @@ Scam Indicators to Look For:
 Confidence:
 - HIGH: Clear and certain about the categorization
 - MEDIUM: Fairly confident but some ambiguity
-- LOW: Uncertain, needs human review"""
+- LOW: Uncertain, needs human review
 
         try:
             message = self.anthropic_client.messages.create(
