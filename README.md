@@ -1,12 +1,17 @@
 # AutoEmailChecker 📧
-A program that checks and categorizes emails in your Gmail account. This program involves Python, Gmail API, and Anthropic API key. 
 
-## Requirement
+A program that checks and categorizes emails by connecting to your Gmail account. The final result will be saved as a CSV file. 
+
+This program provides two approaches. One uses Anthorpic API key, which will cost little money ($5 to begin and about $0.003 for each email processed). The other approach uses a local AI model, Ollama, which is free but slower than using an API key. This program involves Python, Gmail API, and Anthropic API key. 
+
+# 1. AutoEmailChecker with Anthropic API Key
+
+## Requirement 
 - Python 3.7+
 - a Gmail account
 - An Anthropic API key (for Claude)
 
-## Setup Instruction
+## Installation & Setup
 
 **Step 1:** Install required libraries
 ```
@@ -26,7 +31,7 @@ pip install anthropic google-auth-oauthlib google-auth-httplib2 google-api-pytho
 2. Create a new project
 3. Enable Gmail API
 4. Create OAuth 2.0 credentials (Desktop app)
-5. Download the credentials as `credentials.json` under `\checker` directory. 
+5. Download the credentials as `credentials.json` under `\claude` directory. 
 
 **Step 4:** Create a .env file
 
@@ -34,7 +39,7 @@ pip install anthropic google-auth-oauthlib google-auth-httplib2 google-api-pytho
 ANTHROPIC_API_KEY=your_api_key_here
 ```
 
-## Running Instruction
+## Running
 
 **Step 1:** file preparation
 
@@ -58,7 +63,83 @@ The first time you run it:
 3. Grant the app permission to read your email
 4. The script will create a `token.json` file
 
-### Expected Output
-> ============================================================ EMAIL CATEGORIZATION TOOL ============================================================ Choose what emails to categorize: 1. Recent emails (default 20) 2. Emails from a specific date range Enter your choice (1 or 2, press Enter for 1): 2 Enter date range (format: YYYY/MM/DD) Start date (e.g., 2025/07/01): 2025/07/01 End date (e.g., 2025/08/01): 2025/08/01 Maximum emails to process (default 100): 50 Which emails do you want to process? 1. All emails (both read and unread) 2. Only unread emails 3. Only already-read emails Enter your choice (1, 2, or 3, press Enter for 1): 2 ============================================================ PROCESSING CONFIGURATION ============================================================ Date Range: 2025/07/01 to 2025/08/01 Scope: Only unread emails Proceed with categorization? (Y/n): y ============================================================ CATEGORIZING EMAILS ============================================================ ✓ Gmail authenticated successfully! Fetching emails... ✓ Fetched 23 emails Categorizing 23 emails with Claude AI... Processing 1/23 📭: Interview Schedule Request... Processing 2/23 📬: Weekly Newsletter... ...
+# 2. AutoEmailChecker with Ollama
 
-## Fixes
+## Requirement
+
+- Python 3.7+
+- A Gmail account
+- 8GB RAM minimum
+- 5-10GB free disk space for models
+
+**Optional:**
+
+- 16GB RAM recommended
+- GPU (speed up the program)
+
+## Installation & Setup
+
+**Step 1:** Install Ollama
+
+**Step 2:** Doanload an AI model
+```
+# Recommended: Llama 3.2 (2GB)
+ollama pull llama3.2
+
+# Alternative options:
+ollama pull llama3.1 (~4.7GB)
+ollama pull mistral (~4.1 GB)
+ollama pull phi3 (~2.3GB)
+```
+
+**Step 3:** Install Python libraries
+
+```
+pip install google-auth-oauthlib google-auth-httplib2 google-api-python-client requests
+```
+
+**Step 4:** Enable Gmail API
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com/)
+2. Create a new project
+3. Enable Gmail API
+4. Create OAuth 2.0 credentials (Desktop app)
+5. Download the credentials as `credentials.json` under `\ollama` directory. 
+## Running
+
+**Step 1:** Start Ollama
+
+The Ollama app should start automatically after installation. If not, start it manually. 
+
+- Mac: Open Ollama from Applications
+- Windows: Open Ollama from the Start Menu
+- Linux:
+```
+ollama serve
+
+# Verify if Ollama is running (should return a list of models):
+ollama list
+```
+
+**Step 2:** Run Script
+```
+python email_categorizer.py
+```
+
+**Step 3:** Choose model
+
+Example selection:
+```
+Which Ollama model do you want to use?
+Recommended: llama3.2 (fast and good for email)
+Enter model name: llama3.2
+```
+
+## Estimated Performance
+
+Without GPU:
+- 1st email: 5~10 seconds
+- Subsequent emails: 2~5 seconds each
+
+With GPU:
+- 1~3 seconds each
