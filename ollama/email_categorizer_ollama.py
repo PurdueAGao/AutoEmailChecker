@@ -259,7 +259,7 @@ Checking Ollama connection...")
     # Ask user which model to use
     print("
 Which Ollama model do you want to use?")
-    print("Recommended: llama3.2 (fast and good for email)")
+    print("Recommended: llama3.2 ")
     model = input("Enter model name (press Enter for llama3.2): ").strip() or "llama3.2"
     
     categorizer = EmailCategorizer(ollama_model=model)
